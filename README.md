@@ -48,4 +48,5 @@ uv run python -m scripts.fetch_raw --start "2026-06-12 12:00:00" --end "2026-06-
     - `SerialTime` = Excel シリアル値×86400（1899-12-30 起点の経過秒、整数）
     - `_K` = ℃ + 273.15、`_Phi` = %RH × 0.01
 - メタ情報: `data/meta.json`（取得回数・APIリクエスト回数・最終取得・データ範囲・ALL 1秒 Parquet 容量）。
+- ダッシュボードは表示点数が約 5,000 を超えると表示用に平均で自動間引きする（保存データは変更されない。間引き時はグラフ上に注記を表示）。
 - 重複排除: dateTime の full join + 列ごと coalesce（新値優先、null は既存値を潰さない）。
