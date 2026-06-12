@@ -1,0 +1,25 @@
+[project]
+name = "ondotori-monitor"
+version = "0.1.0"
+description = "おんどとり WebStorage 温湿度モニタリング"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "apscheduler>=3.10,<4.0",
+    "httpx>=0.27",
+    "marimo>=0.9",
+    "plotly>=5.20",
+    "polars>=1.0",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "respx>=0.22",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

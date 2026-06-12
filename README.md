@@ -7,9 +7,12 @@
 ## セットアップ
 
 ```bash
+bash src/Shell/setup_dirs.sh                           # data/ ディレクトリ構成を作成（git clone 直後の初回に実行）
 cp .config/secrets.example.toml .config/secrets.toml   # API キー・ID・機器シリアルを記入
 uv sync
 ```
+
+`data/` は gitignore 対象のため clone 直後には存在しない。`setup_dirs.sh` が保存先20ディレクトリと `data/raw` を作成する（冪等。`main.py` やスケジューラの起動時にも自動生成される）。
 
 ## 使い方
 
@@ -38,7 +41,7 @@ uv run python -m scripts.fetch_raw --start "2026-06-12 12:00:00" --end "2026-06-
 - 保存先: `data/{範囲}h{間隔:03d}s/`（範囲 = 012/024/168/ALL、間隔 = 001/005/010/060/300 秒の20ディレクトリ）。
   12h=取得ウィンドウ、24h=日次（JST 0時区切り）、168h=週次（日曜0時起点）、ALL=全期間結合（取得ごとに再出力）。
 - 形式: CSV / TSV（UTF-8-Sig）と Parquet。各ファイルに換算列付きの `{元ファイル名}_T.{拡張子}` を併産。
-- CSV/TSV の測定値は固定小数点表記（`TDB`/`TDB_K`=2桁、`RH`=1桁、`RH_Phi`=3桁。null は空欄）。Parquet は Float64 のまま。
+- CSV/TSV の測定値は固定小数点表記（`TDB`/`RH`=1桁、`TDB_K`=2桁、`RH_Phi`=3桁。null は空欄）。Parquet は Float64 のまま。
 - スキーマ（ワイド形式、列番号は secrets.toml の機器並び順で1始まり）:
   - 通常: `dateTime, 1_TDB, 1_RH, 2_TDB, 2_RH`（JST、温度℃、湿度%RH。機器のエラー値 E0〜E3 は null）
   - `_T`: 上記 + `SerialTime, 1_TDB_K, 1_RH_Phi, 2_TDB_K, 2_RH_Phi`
